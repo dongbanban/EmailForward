@@ -1,0 +1,16 @@
+/*
+ * @file: /Users/i104/EmailForward/src/components/EmailManagement/PreviewModal.css
+ * @author: dongyang
+ */
+
+.preview-modal-container {
+  max-height: 60vh;
+  overflow: auto;
+  border: 1px solid #f0f0f0;
+  padding: 16px;
+  background: #fff;
+}
+
+.preview-modal-no-content {
+  color: #999;
+}
