@@ -5,7 +5,7 @@
 import React from "react";
 import { Layout } from "antd";
 import type { AppLayoutProps } from "@/types/components";
-import "./AppLayout.css";
+import useStyles from "./AppLayout.style";
 
 const { Header, Sider, Content } = Layout;
 
@@ -14,22 +14,24 @@ const { Header, Sider, Content } = Layout;
  * 包含头部、侧边栏和内容区域
  */
 export const AppLayout: React.FC<AppLayoutProps> = ({ children, menu }) => {
+  const styles = useStyles();
+
   return (
-    <Layout className="app-layout">
+    <Layout css={styles.layoutStyles}>
       {/* 头部 */}
-      <Header className="app-header">
-        <div className="app-logo">Email Forward</div>
-        <div className="app-header-right">{/* 预留未来使用 */}</div>
+      <Header css={styles.headerStyles}>
+        <div css={styles.logoStyles}>Email Forward</div>
+        <div css={styles.headerRightStyles}>{/* 预留未来使用 */}</div>
       </Header>
 
       <Layout>
         {/* 侧边栏 */}
-        <Sider width={200} className="app-sider">
+        <Sider width={200} css={styles.siderStyles}>
           {menu}
         </Sider>
 
         {/* 内容区域 */}
-        <Content className="app-content">{children}</Content>
+        <Content css={styles.contentStyles}>{children}</Content>
       </Layout>
     </Layout>
   );

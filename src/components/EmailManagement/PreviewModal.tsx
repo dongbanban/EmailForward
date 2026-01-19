@@ -5,7 +5,7 @@
 import React from "react";
 import { Modal, Button } from "antd";
 import type { PreviewModalProps } from "@/types/components";
-import "./PreviewModal.css";
+import useStyles from "./PreviewModal.style";
 
 /**
  * 邮件预览弹窗组件
@@ -16,6 +16,8 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   onClose,
   onSend,
 }) => {
+  const styles = useStyles();
+
   return (
     <Modal
       title={`Preview: ${template.fileName}`}
@@ -31,11 +33,11 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
         </Button>,
       ]}
     >
-      <div className="preview-modal-container">
+      <div css={styles.containerStyles}>
         {template.htmlContent ? (
           <div dangerouslySetInnerHTML={{ __html: template.htmlContent }} />
         ) : (
-          <p className="preview-modal-no-content">No content</p>
+          <p css={styles.noContentStyles}>No content</p>
         )}
       </div>
     </Modal>

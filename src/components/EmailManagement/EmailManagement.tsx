@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Button, Table, Space, message } from "antd";
-import { FileSearchOutlined } from "@ant-design/icons";
+import { FolderOpenOutlined, MailOutlined } from "@ant-design/icons";
 import { PreviewModal } from "./PreviewModal";
 import { SendModal } from "./SendModal";
-import "./EmailManagement.css";
+import useStyles from "./EmailManagement.style";
 import { useEmailTemplateStore } from "@/store/emailTemplate.store";
 import { templateService } from "@/services/template.service";
 import { emailService } from "@/services/email.service";
@@ -15,6 +15,7 @@ import type { TableProps } from "antd";
  * 邮件管理页面组件
  */
 export const EmailManagement: React.FC = () => {
+  const styles = useStyles();
   const {
     templates,
     fileLoading,
@@ -207,17 +208,18 @@ export const EmailManagement: React.FC = () => {
   ];
 
   return (
-    <div className="email-management-container">
-      <div className="email-management-action-bar">
+    <div css={styles.containerStyles}>
+      <div css={styles.actionBarStyles}>
         <Space>
           <Button
-            icon={<FileSearchOutlined />}
+            icon={<FolderOpenOutlined />}
             onClick={handleLoadTemplates}
             loading={fileLoading}
           >
             Select Template
           </Button>
           <Button
+            icon={<MailOutlined />}
             onClick={handleSendAll}
             loading={sendAllLoading}
             disabled={templates.length === 0}
@@ -225,7 +227,7 @@ export const EmailManagement: React.FC = () => {
             Send All
           </Button>
         </Space>
-        <div className="email-management-hint-text">
+        <div css={styles.hintTextStyles}>
           💡 Click button to select folder containing HTML templates, system
           will automatically read all .html files recursively
         </div>

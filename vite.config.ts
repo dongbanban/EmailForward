@@ -5,7 +5,15 @@ import { createEmailPlugin } from "./server/vite-email-plugin.js";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), createEmailPlugin()],
+  plugins: [
+    react({
+      jsxImportSource: "@emotion/react",
+      babel: {
+        plugins: ["@emotion/babel-plugin"],
+      },
+    }),
+    createEmailPlugin(),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
