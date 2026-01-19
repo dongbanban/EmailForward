@@ -19,10 +19,10 @@ class EmailService {
    */
   async sendEmail(request: SendEmailRequest): Promise<SendEmailResult> {
     try {
-      // 使用默认收件人或指定收件人
-      const recipient = request.to || emailConfig.recipients[0];
+      // 确定收件人列表：如果指定了收件人则使用单个收件人，否则使用配置中的所有收件人
+      const recipients = request.to ? [request.to] : emailConfig.recipients;
 
-      if (!recipient) {
+      if (!recipients || recipients.length === 0) {
         return {
           success: false,
           message: "Failed to send",
@@ -30,34 +30,70 @@ class EmailService {
         };
       }
 
-      console.log(`Sending email to: ${recipient}`);
+      // 给所有收件人发送邮件
+      const results = [];
+      for (const recipient of recipients) {
+        const response = await fetch(`${this.apiUrl}/send-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            to: recipient,
+            subject: request.subject,
+            html: request.html,
+          }),
+        });
 
-      // 调用后端 API
-      const response = await fetch(`${this.apiUrl}/send-email`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          to: recipient,
-          subject: request.subject,
-          html: request.html,
-        }),
-      });
+        if (!response.ok) {
+          const error = await response.json();
+          results.push({
+            recipient,
+            success: false,
+            error: error.error || error.message,
+          });
+        } else {
+          const result = await response.json();
+          results.push({
+            recipient,
+            success: true,
+            ...result,
+          });
+        }
 
-      if (!response.ok) {
-        const error = await response.json();
-        return {
-          success: false,
-          message: "Failed to send email",
-          error: error.error || error.message,
-        };
+        // 多个收件人时添加延迟，避免发送过快
+        if (recipients.length > 1) {
+          await this.delay(emailConfig.sendOptions.retryDelay);
+        }
       }
 
-      const result = await response.json();
-      return result;
+      // 汇总结果
+      const successCount = results.filter((r) => r.success).length;
+      const failedResults = results.filter((r) => !r.success);
+
+      if (successCount === results.length) {
+        return {
+          success: true,
+          message: `Successfully sent to ${successCount} recipient(s)`,
+        };
+      } else if (successCount === 0) {
+        return {
+          success: false,
+          message: "Failed to send to all recipients",
+          error: failedResults
+            .map((r) => `${r.recipient}: ${r.error}`)
+            .join("; "),
+        };
+      } else {
+        return {
+          success: true,
+          message: `Partially sent: ${successCount} succeeded, ${failedResults.length} failed`,
+          error: failedResults
+            .map((r) => `${r.recipient}: ${r.error}`)
+            .join("; "),
+        };
+      }
     } catch (error) {
-      console.error("Failed to send email:", error);
       return {
         success: false,
         message: "Failed to send email",
