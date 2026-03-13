@@ -2,6 +2,25 @@
 
 本文档定义了如何智能地将 Figma 样式值映射到项目 Design Token 系统。
 
+---
+
+## 项目变量说明
+
+> **便于分享的变量化配置**  
+> 本文档使用变量代替项目特定信息，分享时可一键替换
+
+| 变量                           | 当前值                  | 说明              |
+| ------------------------------ | ----------------------- | ----------------- |
+| `{{PROJECT_NAME}}`             | `你的项目`              | 项目名称          |
+| `{{PROJECT_COMPONENT_PREFIX}}` | `你的项目组件`          | 项目组件前缀      |
+| `{{DESIGN_SYSTEM}}`            | `你的设计系统`          | 设计系统名称      |
+| `{{DESIGN_PACKAGE}}`           | `你的设计系统 npm 包名` | 设计系统 npm 包名 |
+| `{{MCP_PREFIX}}`               | `你的 MCP 工具调用前缀` | MCP 工具调用前缀  |
+
+**使用说明**：分享文档前，使用查找替换功能将上述变量替换为目标项目的实际值即可。
+
+---
+
 ## 目录
 
 - [核心目标](#核心目标)
@@ -43,7 +62,7 @@
 
 ---
 
-## 📊 映射流程
+## 映射流程
 
 ### 步骤 1：提取 Figma 样式值
 
@@ -62,7 +81,7 @@ const figmaStyles = {
 ### 步骤 2：加载项目 Token 注册表
 
 ```typescript
-const token = useToken(); // 从 组件库 获取
+const token = useToken(); // 从 @derbysoft/neat-design 获取
 
 const tokenRegistry = {
   colors: filterTokens(token, "color-"),
@@ -77,7 +96,7 @@ const tokenRegistry = {
 
 ---
 
-## 🎨 颜色匹配策略
+## 颜色匹配策略
 
 ### 精确匹配
 
@@ -137,7 +156,7 @@ function colorDistance(color1, color2) {
 
 ---
 
-## 📏 尺寸匹配策略
+## 尺寸匹配策略
 
 ### 近似匹配（允许误差）
 
@@ -187,7 +206,7 @@ Tokens:
 
 ---
 
-## 📐 间距匹配策略
+## 间距匹配策略
 
 间距使用与尺寸相同的策略，但阈值稍宽松：
 
@@ -206,7 +225,7 @@ function calculateSpacingConfidence(diff) {
 
 ---
 
-## 🎯 置信度分级处理
+## 置信度分级处理
 
 ### 高置信度（≥0.8）
 
@@ -254,7 +273,7 @@ console.error(`C. 临时使用原始值（需后续优化）`);
 
 ---
 
-## 🔍 特殊情况处理
+## 特殊情况处理
 
 ### 1. 透明度处理
 
@@ -295,7 +314,7 @@ const shadowMatch = matchShadow(figmaShadow, shadowTokens);
 
 ---
 
-## 📋 匹配结果格式
+## 匹配结果格式
 
 ```typescript
 interface MatchResult {
@@ -318,7 +337,7 @@ interface MatchResult {
 
 ---
 
-## ✅ 最佳实践
+## 最佳实践
 
 1. **优先精确匹配**
    - 先尝试精确匹配，再尝试近似匹配
@@ -340,7 +359,7 @@ interface MatchResult {
 
 ---
 
-## 🚫 反模式
+## 反模式
 
 ❌ **直接使用 Figma 值**
 
@@ -382,7 +401,7 @@ if (match.confidence >= 0.8) {
 
 ---
 
-## 🔗 相关文档
+## 相关文档
 
 - [Figma MCP 集成规范](./figma-mcp-integration.md) - 如何获取样式值
 - [成功验收标准](./success-criteria.md) - Token 使用率要求

@@ -2,6 +2,25 @@
 
 本文档定义如何根据 Figma 设计创建全新的页面文件。
 
+---
+
+## 项目变量说明
+
+> **便于分享的变量化配置**  
+> 本文档使用变量代替项目特定信息，分享时可一键替换
+
+| 变量                           | 当前值                  | 说明              |
+| ------------------------------ | ----------------------- | ----------------- |
+| `{{PROJECT_NAME}}`             | `你的项目`              | 项目名称          |
+| `{{PROJECT_COMPONENT_PREFIX}}` | `你的项目组件`          | 项目组件前缀      |
+| `{{DESIGN_SYSTEM}}`            | `你的设计系统`          | 设计系统名称      |
+| `{{DESIGN_PACKAGE}}`           | `你的设计系统 npm 包名` | 设计系统 npm 包名 |
+| `{{MCP_PREFIX}}`               | `你的 MCP 工具调用前缀` | MCP 工具调用前缀  |
+
+**使用说明**：分享文档前，使用查找替换功能将上述变量替换为目标项目的实际值即可。
+
+---
+
 ## 目录
 
 - [适用场景](#适用场景)
@@ -29,7 +48,7 @@
 
 ---
 
-## 🎯 适用场景
+## 适用场景
 
 - ✅ 完全新建的页面（文件不存在）
 - ✅ Figma 设计包含完整的页面布局
@@ -37,7 +56,7 @@
 
 ---
 
-## 📋 准备检查
+## 准备检查
 
 ### 前置条件
 
@@ -61,13 +80,13 @@
 
 3. 依赖检查
    - [ ] Figma MCP 工具可用
-   - [ ] 组件库 MCP 工具可用
+   - [ ] Neat Design MCP 工具可用
    - [ ] Token 系统可用
 ```
 
 ---
 
-## 🔄 执行流程
+## 执行流程
 
 ### 第 1 步：获取 Figma 设计上下文
 
@@ -138,20 +157,22 @@ interface PageStructure {
 2. 根据组件功能搜索（如"搜索框"、"数据表格"）
 3. 查看类似页面的实现（如已有的列表页）
 
-**调用组件库MCP**：
+**调用 Neat Design MCP**：
 
 ```typescript
 // 获取所有可用组件
-m_get_all_component_names();
+mcp_neat - design - m_get_all_component_names();
 
 // 获取组件文档
-m_get_component_document({ componentName: "Button" });
+mcp_neat - design - m_get_component_document({ componentName: "Button" });
 
 // 获取组件示例
-m_get_component_example({
-  componentName: "Button",
-  exampleId: "primary-button",
-});
+mcp_neat -
+  design -
+  m_get_component_example({
+    componentName: "Button",
+    exampleId: "primary-button",
+  });
 ```
 
 **决策标准**：
@@ -160,7 +181,7 @@ m_get_component_example({
 组件是否复用？
 ├─ 已有 100% 匹配的组件 → ✅ 直接使用
 ├─ 已有功能相似的组件 → ✅ 使用 + 传递 props 定制
-├─ 已有指定组件 → ✅ 优先使用
+├─ 已有 Neat Design 组件 → ✅ 优先使用
 ├─ 类似组件可简单改造 → ⚠️ 考虑扩展现有组件
 └─ 完全不存在 → ⏸️ 标记为"需新建"，但先完成页面框架
 ```
@@ -182,7 +203,7 @@ var(--spacing-md, 16px) → 16px
 **加载项目 Token**：
 
 ```typescript
-const token = useToken(); // 组件库提供
+const token = useToken(); // @derbysoft/neat-design
 ```
 
 **智能匹配**：
@@ -208,7 +229,7 @@ const token = useToken(); // 组件库提供
 #### 主文件（UserList.tsx）
 
 ```
-- 导入语句（React, 指定组件, Token, 类型）
+- 导入语句（React, Neat Design 组件, Token, 类型）
 - 接口定义（Props, State）
 - 函数组件定义
   - Hooks (useState, useEffect, useCallback 等)
@@ -548,7 +569,7 @@ C. 手动指定 Token 映射规则
 
 - [意图识别](./intent-detection.md) - 如何路由到此工作流
 - [新组件工作流](./new-component.md) - 补充自定义组件
-- [Figma MCP 集成规范](../reference/figma-mcp-integration.md) - API 调用细节
-- [样式映射策略](../reference/style-mapping-strategy.md) - Token 匹配算法
-- [错误处理策略](../reference/error-handling.md) - 异常情况处理
-- [成功验收标准](../reference/success-criteria.md) - 质量评估标准
+- [Figma MCP 集成规范](../references/figma-mcp-integration.md) - API 调用细节
+- [样式映射策略](../references/style-mapping-strategy.md) - Token 匹配算法
+- [错误处理策略](../references/error-handling.md) - 异常情况处理
+- [成功验收标准](../references/success-criteria.md) - 质量评估标准

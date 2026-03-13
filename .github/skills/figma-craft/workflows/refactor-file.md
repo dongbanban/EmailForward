@@ -2,6 +2,25 @@
 
 本文档定义如何根据 Figma 设计完全重构现有文件，适用于大范围改动或重大设计变更。
 
+---
+
+## 项目变量说明
+
+> **便于分享的变量化配置**  
+> 本文档使用变量代替项目特定信息，分享时可一键替换
+
+| 变量                           | 当前值                  | 说明              |
+| ------------------------------ | ----------------------- | ----------------- |
+| `{{PROJECT_NAME}}`             | `你的项目`              | 项目名称          |
+| `{{PROJECT_COMPONENT_PREFIX}}` | `你的项目组件`          | 项目组件前缀      |
+| `{{DESIGN_SYSTEM}}`            | `你的设计系统`          | 设计系统名称      |
+| `{{DESIGN_PACKAGE}}`           | `你的设计系统 npm 包名` | 设计系统 npm 包名 |
+| `{{MCP_PREFIX}}`               | `你的 MCP 工具调用前缀` | MCP 工具调用前缀  |
+
+**使用说明**：分享文档前，使用查找替换功能将上述变量替换为目标项目的实际值即可。
+
+---
+
 ## 目录
 
 - [适用场景](#适用场景)
@@ -24,8 +43,8 @@
   - [第 12 步：更新依赖方（如需要）](#第-12-步更新依赖方如需要)
   - [第 13 步：生成重构报告](#第-13-步生成重构报告)
 - [成功标准](#成功标准)
-  - [核心标准（必须）](#核心标凅必须)
-  - [次要标准（推荐）](#次要标凅推荐)
+  - [核心标准（必须）](#核心标准必须)
+  - [次要标准（推荐）](#次要标准推荐)
 - [常见错误](#常见错误)
   - [错误 1：遗漏关键业务逻辑](#错误-1遗漏关键业务逻辑)
   - [错误 2：破坏向后兼容性](#错误-2破坏向后兼容性)
@@ -34,7 +53,7 @@
 
 ---
 
-## 🎯 适用场景
+## 适用场景
 
 - ✅ 设计大幅改变，与原实现差异显著
 - ✅ 需要完全重写代码（保留少于 30% 原代码）
@@ -43,14 +62,16 @@
 
 ---
 
-## ⚠️ 风险提示
+## 风险提示
 
 **重构是高风险操作，可能导致：**
+
 - ❌ 破坏现有功能
 - ❌ 引入新 bug
 - ❌ 影响依赖此文件的其他模块
 
 **建议**：
+
 1. 确保有完整的测试覆盖（单元测试、集成测试）
 2. 使用版本控制（Git），确保可回滚
 3. 通知团队成员即将进行的重构
@@ -58,7 +79,7 @@
 
 ---
 
-## 📋 准备检查
+## 准备检查
 
 ### 前置条件
 
@@ -74,16 +95,19 @@
 
 ```markdown
 依赖关系：
+
 - [ ] 已搜索引用此文件的其他模块
 - [ ] 已评估破坏性影响（API 变化、导出变化）
 - [ ] 已计划更新依赖方（如需要）
 
 测试覆盖：
+
 - [ ] 有单元测试（理想）
 - [ ] 有集成测试（次优）
 - [ ] 无测试（高风险，建议先编写测试）
 
 版本控制：
+
 - [ ] 当前分支干净（无未提交更改）
 - [ ] 已创建重构专用分支
 - [ ] 团队成员已知晓
@@ -91,7 +115,7 @@
 
 ---
 
-## 🔄 执行流程
+## 执行流程
 
 ### 第 1 步：分析现有文件
 
@@ -100,6 +124,7 @@
 **分析内容**：
 
 #### A. 业务逻辑（通常需保留）
+
 ```markdown
 - [ ] API 调用和数据获取
 - [ ] 表单验证规则
@@ -108,6 +133,7 @@
 ```
 
 #### B. 状态管理（评估保留）
+
 ```markdown
 - [ ] 状态定义（可能需调整）
 - [ ] 状态更新逻辑（可能需改写）
@@ -115,6 +141,7 @@
 ```
 
 #### C. 事件处理（通常需保留）
+
 ```markdown
 - [ ] 点击处理
 - [ ] 表单提交
@@ -122,6 +149,7 @@
 ```
 
 #### D. 工具函数（通常需保留）
+
 ```markdown
 - [ ] 数据格式化
 - [ ] 验证函数
@@ -129,6 +157,7 @@
 ```
 
 #### E. UI 层（通常需重写）
+
 ```markdown
 - [ ] 组件结构（大概率重写）
 - [ ] 样式定义（重写）
@@ -136,6 +165,7 @@
 ```
 
 **输出保留清单**：
+
 ```typescript
 需要保留：
 1. 业务逻辑
@@ -162,11 +192,12 @@
 ### 第 2 步：获取 Figma 新设计
 
 **调用**：
+
 ```typescript
 mcp_figma_get_design_context({
-  fileKey: '...',
-  nodeId: '...'
-})
+  fileKey: "...",
+  nodeId: "...",
+});
 ```
 
 **详细规范**：参考 [Figma MCP 集成规范](../reference/figma-mcp-integration.md)
@@ -179,6 +210,7 @@ mcp_figma_get_design_context({
 **适用**：设计差异 >70%
 
 **步骤**：
+
 1. 提取需保留的代码片段（业务逻辑、工具函数）
 2. 按新页面/新组件工作流生成全新代码
 3. 将保留的代码片段迁移到新代码中
@@ -186,11 +218,13 @@ mcp_figma_get_design_context({
 5. 替换为新代码
 
 **优点**：
+
 - ✅ 代码更清晰（无历史包袱）
 - ✅ 完全符合新设计
 - ✅ 易于应用新架构（如 Hooks）
 
 **缺点**：
+
 - ❌ 工作量大
 - ❌ 风险高（可能遗漏逻辑）
 
@@ -200,21 +234,25 @@ mcp_figma_get_design_context({
 **适用**：设计差异 30-70%
 
 **步骤**：
+
 1. 先修改 UI 层（组件结构、样式）
 2. 保持业务逻辑不变
 3. 逐步优化逻辑层（可选）
 
 **优点**：
+
 - ✅ 风险相对较小
 - ✅ 可分步验证
 
 **缺点**：
+
 - ❌ 可能保留历史包袱
 - ❌ 代码一致性较差
 
 ---
 
 **选择策略**：
+
 ```
 设计差异评估：
 
@@ -238,6 +276,7 @@ mcp_figma_get_design_context({
 **重构必须先备份原文件。**
 
 **操作**：
+
 ```typescript
 const backupPath = `${targetPath}.backup-${Date.now()}`;
 await copyFile(targetPath, backupPath);
@@ -247,6 +286,7 @@ console.info(`⚠️ 重构完成后，请彻底测试再删除备份`);
 ```
 
 **Git 备份**：
+
 ```bash
 # 推荐：提交当前版本
 git add src/pages/UserList/UserList.tsx
@@ -265,6 +305,7 @@ git checkout -b refactor/user-list
 **提取方式**：
 
 #### A. 提取业务逻辑函数
+
 ```typescript
 // 从原文件提取
 const businessLogic = `
@@ -282,6 +323,7 @@ function validateForm(values: FormValues) {
 ```
 
 #### B. 提取类型定义
+
 ```typescript
 const typeDefinitions = `
 interface UserData {
@@ -299,6 +341,7 @@ interface FormValues {
 ```
 
 #### C. 提取工具函数
+
 ```typescript
 const utilityFunctions = `
 function formatDate(date: Date) {
@@ -318,10 +361,12 @@ function filterActiveUsers(users: UserData[]) {
 **按新页面/新组件工作流生成代码。**
 
 **参考**：
+
 - [新页面工作流](./new-page.md) - 如果是页面文件
 - [新组件工作流](./new-component.md) - 如果是组件文件
 
 **关键要点**：
+
 1. 完全基于新设计生成
 2. 使用最新的最佳实践（Hooks、TypeScript、Token）
 3. 遵循项目代码规范
@@ -359,16 +404,17 @@ function filterActiveUsers(users: UserData[]) {
 ```
 
 **示例**：
+
 ```typescript
 // 新生成的代码
 export default function UserList() {
   const [users, setUsers] = useState<UserData[]>([]);
-  
+
   // ✅ 迁移：保留原来的数据获取逻辑
   useEffect(() => {
     fetchUserData().then(setUsers);
   }, []);
-  
+
   // ✅ 迁移：保留原来的表单验证
   const handleSubmit = (values: FormValues) => {
     const error = validateForm(values);
@@ -378,7 +424,7 @@ export default function UserList() {
     }
     // 提交逻辑
   };
-  
+
   // 新的 UI（基于 Figma 设计）
   return (
     <div css={containerStyles}>
@@ -413,6 +459,7 @@ interface UserData {
 ### 第 8 步：TypeScript 类型检查
 
 **全面验证**：
+
 ```bash
 tsc --noEmit
 ```
@@ -426,6 +473,7 @@ tsc --noEmit
 ### 第 9 步：代码质量检查
 
 **ESLint + Prettier**：
+
 ```bash
 npm run lint
 npm run format
@@ -436,6 +484,7 @@ npm run format
 ### 第 10 步：替换原文件
 
 **操作**：
+
 ```typescript
 // 备份已在第 4 步完成
 await writeFile(targetPath, newCode);
@@ -490,6 +539,7 @@ console.info(`⚠️ 备份位置：${backupPath}`);
 **如果文件的导出 API 发生变化，需要更新依赖方。**
 
 #### 识别依赖：
+
 ```bash
 # 搜索引用此文件的其他文件
 grep -r "from './UserList'" src/
@@ -497,6 +547,7 @@ grep -r "from '@/pages/UserList'" src/
 ```
 
 #### 更新示例：
+
 ```typescript
 // 原文件导出（类组件）
 export default class UserList extends Component { ... }
@@ -510,6 +561,7 @@ import UserList from '@/pages/UserList';
 ```
 
 **如果 Props 变化**：
+
 ```typescript
 // 原 Props
 interface OldProps {
@@ -531,6 +583,7 @@ interface NewProps {
 ### 第 13 步：生成重构报告
 
 **输出**：
+
 ```markdown
 ✅ 文件重构完成
 
@@ -538,11 +591,13 @@ interface NewProps {
 备份：src/pages/UserList/UserList.tsx.backup-1701234567890
 
 重构摘要：
+
 - 原文件：450 行（类组件 + 行内样式）
 - 新文件：320 行（函数组件 + Emotion + Token）
 - 代码减少：28%
 
 保留内容：
+
 1. 业务逻辑 (5 个函数)
    - fetchUserData
    - validateForm
@@ -560,6 +615,7 @@ interface NewProps {
    - DEFAULT_PAGE_SIZE
 
 新增内容：
+
 1. UI 完全重写（基于新设计）
 2. 使用 Hooks 替代类组件
 3. 100% 使用 Token
@@ -567,11 +623,13 @@ interface NewProps {
 5. 新增高级筛选
 
 移除内容：
+
 - 旧的 Sidebar 组件
 - 废弃的 table 样式
 - 未使用的 helper 函数
 
 验证结果：
+
 - TypeScript: ✅ 0 errors
 - ESLint: ✅ 0 errors
 - 单元测试: ✅ 18/18 passed
@@ -579,14 +637,17 @@ interface NewProps {
 - 视觉对比: ✅ 97% 还原度
 
 性能对比：
+
 - 首次渲染：1.2s → 0.8s (提升 33%)
 - 包大小：+12KB（新增功能）
 
 依赖影响：
+
 - 引用此文件的模块：3 个
 - 需要更新的模块：0 个（API 兼容）
 
 建议：
+
 1. 彻底测试所有功能
 2. 监控生产环境表现
 3. 一周后删除备份文件（如无问题）
@@ -594,6 +655,7 @@ interface NewProps {
 
 风险提示：
 ⚠️ 虽然所有测试通过，但仍建议：
+
 - 密切关注用户反馈
 - 监控错误日志
 - 准备快速回滚方案（使用备份）
@@ -601,11 +663,12 @@ interface NewProps {
 
 ---
 
-## ✅ 成功标准
+## 成功标准
 
 重构成功需满足：
 
 ### 核心标准（必须）
+
 - ✅ TypeScript 类型检查 0 错误
 - ✅ 所有单元测试通过
 - ✅ 所有功能测试通过
@@ -613,6 +676,7 @@ interface NewProps {
 - ✅ 视觉还原度 ≥95%
 
 ### 次要标准（推荐）
+
 - ✅ 代码质量提升（行数减少、可读性提高）
 - ✅ Token 使用率 ≥90%
 - ✅ 性能不下降（甚至提升）
@@ -622,7 +686,7 @@ interface NewProps {
 
 ---
 
-## 🚫 常见错误
+## 常见错误
 
 ### 错误 1：遗漏关键业务逻辑
 
@@ -631,8 +695,10 @@ interface NewProps {
 **原因**：在提取保留代码时遗漏了某个函数或副作用
 
 **预防**：
+
 ```markdown
 重构前：
+
 1. 列出所有函数（包括 useEffect）
 2. 逐个标记"保留"或"重写"
 3. 逐个迁移"保留"的函数
@@ -646,8 +712,10 @@ interface NewProps {
 **原因**：导出的 API 发生变化（Props 变化、导出名称变化）
 
 **预防**：
+
 ```markdown
 重构前：
+
 1. 搜索所有引用此文件的地方
 2. 记录当前的 Props 接口
 3. 确保新 Props 兼容旧 Props（或更新所有调用方）
@@ -660,8 +728,10 @@ interface NewProps {
 **原因**：重构后没有进行彻底测试
 
 **预防**：
+
 ```markdown
 重构后必须执行：
+
 1. 所有自动化测试（单元、集成）
 2. 手动功能测试（覆盖所有交互）
 3. 边界情况测试
@@ -671,13 +741,13 @@ interface NewProps {
 
 ---
 
-## 🔗 相关文档
+## 相关文档
 
 - [意图识别](./intent-detection.md) - 如何路由到此工作流
 - [修改文件工作流](./modify-file.md) - 小范围改动使用修改模式
 - [新页面工作流](./new-page.md) - 重构时生成新代码参考
 - [新组件工作流](./new-component.md) - 重构组件时参考
-- [Figma MCP 集成规范](../reference/figma-mcp-integration.md) - API 调用细节
-- [样式映射策略](../reference/style-mapping-strategy.md) - Token 匹配算法
-- [错误处理策略](../reference/error-handling.md) - 异常情况处理
-- [成功验收标准](../reference/success-criteria.md) - 质量评估标准
+- [Figma MCP 集成规范](../references/figma-mcp-integration.md) - API 调用细节
+- [样式映射策略](../references/style-mapping-strategy.md) - Token 匹配算法
+- [错误处理策略](../references/error-handling.md) - 异常情况处理
+- [成功验收标准](../references/success-criteria.md) - 质量评估标准

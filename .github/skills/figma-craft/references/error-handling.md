@@ -2,6 +2,25 @@
 
 本文档定义处理各类错误的标准流程和恢复机制。
 
+---
+
+## 项目变量说明
+
+> **便于分享的变量化配置**
+> 本文档使用变量代替项目特定信息，分享时可一键替换
+
+| 变量                           | 当前值                  | 说明              |
+| ------------------------------ | ----------------------- | ----------------- |
+| `{{PROJECT_NAME}}`             | `你的项目`              | 项目名称          |
+| `{{PROJECT_COMPONENT_PREFIX}}` | `你的项目组件`          | 项目组件前缀      |
+| `{{DESIGN_SYSTEM}}`            | `你的设计系统`          | 设计系统名称      |
+| `{{DESIGN_PACKAGE}}`           | `你的设计系统 npm 包名` | 设计系统 npm 包名 |
+| `{{MCP_PREFIX}}`               | `你的 MCP 工具调用前缀` | MCP 工具调用前缀  |
+
+**使用说明**：分享文档前，使用查找替换功能将上述变量替换为目标项目的实际值即可。
+
+---
+
 ## 目录
 
 - [错误处理原则](#错误处理原则)
@@ -30,7 +49,7 @@
 
 ---
 
-## 🎯 错误处理原则
+## 错误处理原则
 
 1. **及时发现**：执行每步操作后立即验证
 2. **清晰反馈**：告知用户发生了什么、为什么、如何修复
@@ -39,7 +58,7 @@
 
 ---
 
-## 🔴 错误分类
+## 错误分类
 
 ### 类型 A：MCP 调用失败
 
@@ -182,7 +201,7 @@ console.error("❌ 未找到 Token 系统初始化代码");
 console.error("");
 console.error("可能原因：");
 console.error("1. 当前文件不在 React 组件上下文中");
-console.error("2. 缺少 ant-design 依赖");
+console.error("2. 缺少 @derbysoft/neat-design 依赖");
 console.error("");
 
 const context = await analyzeFileContext(currentFile);
@@ -190,7 +209,7 @@ const context = await analyzeFileContext(currentFile);
 if (context.isReactComponent) {
   console.info("✅ 这是 React 组件，将添加 useToken");
   // 自动在文件顶部添加
-  // import { useToken } from 'ant-design';
+  // import { useToken } from '@derbysoft/neat-design';
   // const token = useToken();
 } else {
   console.error("❌ 非 React 组件文件无法使用 Token");
@@ -484,7 +503,7 @@ if (missing.length > 0) {
 
 ---
 
-## 🛡️ 预防性措施
+## 预防性措施
 
 ### 1. 操作前检查
 
@@ -563,7 +582,7 @@ async function generateComponent() {
 
 ---
 
-## 🔗 相关文档
+## 相关文档
 
 - [Figma MCP 集成规范](./figma-mcp-integration.md) - MCP 调用错误处理
 - [样式映射策略](./style-mapping-strategy.md) - Token 匹配失败处理

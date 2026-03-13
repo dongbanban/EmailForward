@@ -4,7 +4,24 @@
 
 ---
 
-## 🚨 必须遵循的调用流程
+## 项目变量说明
+
+> **便于分享的变量化配置**  
+> 本文档使用变量代替项目特定信息，分享时可一键替换
+
+| 变量                           | 当前值                  | 说明              |
+| ------------------------------ | ----------------------- | ----------------- |
+| `{{PROJECT_NAME}}`             | `你的项目`              | 项目名称          |
+| `{{PROJECT_COMPONENT_PREFIX}}` | `你的项目组件`          | 项目组件前缀      |
+| `{{DESIGN_SYSTEM}}`            | `你的设计系统`          | 设计系统名称      |
+| `{{DESIGN_PACKAGE}}`           | `你的设计系统 npm 包名` | 设计系统 npm 包名 |
+| `{{MCP_PREFIX}}`               | `你的 MCP 工具调用前缀` | MCP 工具调用前缀  |
+
+**使用说明**：分享文档前，使用查找替换功能将上述变量替换为目标项目的实际值即可。
+
+---
+
+## 必须遵循的调用流程
 
 ### 1. 始终先调用 `get_design_context`
 
@@ -149,13 +166,13 @@ var(--name, VALUE) → VALUE
 
 - Tailwind 类 → 项目 Design Token
 - 内联样式 → useCreateStyles hook
-- 任意组件名 → ant Design / 指定项目 组件
+- 任意组件名 → Neat Design / TopUp 组件
 
 **2. 重用项目组件**
 优先顺序：
 
-1. 指定项目 包装组件
-2. ant Design 组件（如 Table, Button）
+1. TopUp 包装组件（如 TopUpTableV2）
+2. Neat Design 组件（如 Table, Button）
 3. 自定义组件（如必须）
 
 **3. 遵循项目样式系统**

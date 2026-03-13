@@ -2,6 +2,25 @@
 
 本文档定义如何根据 Figma 设计创建独立的 React 组件。
 
+---
+
+## 项目变量说明
+
+> **便于分享的变量化配置**  
+> 本文档使用变量代替项目特定信息，分享时可一键替换
+
+| 变量                           | 当前值                  | 说明              |
+| ------------------------------ | ----------------------- | ----------------- |
+| `{{PROJECT_NAME}}`             | `你的项目`              | 项目名称          |
+| `{{PROJECT_COMPONENT_PREFIX}}` | `你的项目组件`          | 项目组件前缀      |
+| `{{DESIGN_SYSTEM}}`            | `你的设计系统`          | 设计系统名称      |
+| `{{DESIGN_PACKAGE}}`           | `你的设计系统 npm 包名` | 设计系统 npm 包名 |
+| `{{MCP_PREFIX}}`               | `你的 MCP 工具调用前缀` | MCP 工具调用前缀  |
+
+**使用说明**：分享文档前，使用查找替换功能将上述变量替换为目标项目的实际值即可。
+
+---
+
 ## 目录
 
 - [适用场景](#适用场景)
@@ -31,7 +50,7 @@
 
 ---
 
-## 🎯 适用场景
+## 适用场景
 
 - ✅ 创建可复用的业务组件
 - ✅ 提取页面中的通用模块为组件
@@ -40,7 +59,7 @@
 
 ---
 
-## 📋 准备检查
+## 准备检查
 
 ### 前置条件
 
@@ -68,14 +87,14 @@
 - 不依赖特定数据结构
 - 示例：IconButton, StatusBadge, Tooltip
 
-优先使用 Ant Design：
+优先使用 Neat Design：
 
-- 如果 Ant Design 已有类似组件，优先使用而非新建
+- 如果 Neat Design 已有类似组件，优先使用而非新建
 ```
 
 ---
 
-## 🔄 执行流程
+## 执行流程
 
 ### 第 1 步：获取 Figma 组件设计
 
@@ -194,11 +213,11 @@ type ComponentType =
    - 新增 prop 应是可选的
    - 避免破坏性修改
 
-**参考 Ant Design API**：
+**参考 Neat Design API**：
 
 ```typescript
 // 查看类似组件的 API 设计
-mcp_Ant - design - m_get_component_document({ componentName: "Button" });
+mcp_neat - design - m_get_component_document({ componentName: "Button" });
 ```
 
 ---
@@ -214,19 +233,19 @@ mcp_Ant - design - m_get_component_document({ componentName: "Button" });
    ```markdown
    设计包含：
 
-   - 输入框 → 使用 <Input /> from Ant Design
-   - 按钮 → 使用 <Button /> from Ant Design
-   - 图标 → 使用 <Icon /> from Ant Design
+   - 输入框 → 使用 <Input /> from Neat Design
+   - 按钮 → 使用 <Button /> from Neat Design
+   - 图标 → 使用 <Icon /> from Neat Design
    ```
 
-2. **查询 Ant Design 组件库**
+2. **查询 Neat Design 组件库**
 
    ```typescript
    // 获取所有可用组件
-   mcp_Ant - design - m_get_all_component_names();
+   mcp_neat - design - m_get_all_component_names();
 
    // 查看组件详情
-   mcp_Ant - design - m_get_component_document({ componentName: "Input" });
+   mcp_neat - design - m_get_component_document({ componentName: "Input" });
    ```
 
 3. **搜索项目现有组件**
@@ -239,9 +258,9 @@ mcp_Ant - design - m_get_component_document({ componentName: "Button" });
 
 ```markdown
 子组件是否可复用？
-├─ Ant Design 有 → ✅ 优先使用
+├─ Neat Design 有 → ✅ 优先使用
 ├─ 项目中已存在 → ✅ 直接引用
-├─ 需要定制 → ⚠️ 扩展 Ant Design 组件
+├─ 需要定制 → ⚠️ 扩展 Neat Design 组件
 └─ 完全自定义 → ⏸️ 标记为"需创建子组件"
 ```
 
@@ -287,7 +306,7 @@ mcp_Ant - design - m_get_component_document({ componentName: "Button" });
 
 ```
 1. 导入语句
-   - React, Ant Design 组件, Token
+   - React, Neat Design 组件, Token
    - 类型定义
    - 子组件（如有）
 
@@ -531,8 +550,8 @@ export default function SearchFormExample() {
 第 4 步：查找依赖组件
 ✅ 已查找依赖
    子组件：
-   - Input (Ant Design) ✅
-   - Button (Ant Design) ✅
+   - Input (Neat Design) ✅
+   - Button (Neat Design) ✅
    复用率：100%
 
 第 5 步：提取并匹配样式 Token
@@ -671,8 +690,8 @@ C. 保持当前结构
 
 - [意图识别](./intent-detection.md) - 如何路由到此工作流
 - [新页面工作流](./new-page.md) - 在页面中使用组件
-- [Figma MCP 集成规范](../reference/figma-mcp-integration.md) - API 调用细节
-- [样式映射策略](../reference/style-mapping-strategy.md) - Token 匹配算法
-- [错误处理策略](../reference/error-handling.md) - 异常情况处理
-- [成功验收标准](../reference/success-criteria.md) - 质量评估标准
+- [Figma MCP 集成规范](../references/figma-mcp-integration.md) - API 调用细节
+- [样式映射策略](../references/style-mapping-strategy.md) - Token 匹配算法
+- [错误处理策略](../references/error-handling.md) - 异常情况处理
+- [成功验收标准](../references/success-criteria.md) - 质量评估标准
 ```

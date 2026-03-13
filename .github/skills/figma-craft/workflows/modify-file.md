@@ -2,6 +2,25 @@
 
 本文档定义如何根据 Figma 设计修改现有文件，在保持原有代码的基础上进行增量更新。
 
+---
+
+## 项目变量说明
+
+> **便于分享的变量化配置**  
+> 本文档使用变量代替项目特定信息，分享时可一键替换
+
+| 变量                           | 当前值                  | 说明              |
+| ------------------------------ | ----------------------- | ----------------- |
+| `{{PROJECT_NAME}}`             | `你的项目`              | 项目名称          |
+| `{{PROJECT_COMPONENT_PREFIX}}` | `你的项目组件`          | 项目组件前缀      |
+| `{{DESIGN_SYSTEM}}`            | `你的设计系统`          | 设计系统名称      |
+| `{{DESIGN_PACKAGE}}`           | `你的设计系统 npm 包名` | 设计系统 npm 包名 |
+| `{{MCP_PREFIX}}`               | `你的 MCP 工具调用前缀` | MCP 工具调用前缀  |
+
+**使用说明**：分享文档前，使用查找替换功能将上述变量替换为目标项目的实际值即可。
+
+---
+
 ## 目录
 
 - [适用场景](#适用场景)
@@ -30,7 +49,7 @@
 
 ---
 
-## 🎯 适用场景
+## 适用场景
 
 - ✅ 文件已存在，需要根据新设计调整
 - ✅ 仅修改部分UI，不影响核心逻辑
@@ -39,7 +58,7 @@
 
 ---
 
-## 📋 准备检查
+## 准备检查
 
 ### 前置条件
 
@@ -67,7 +86,7 @@
 
 ---
 
-## 🔄 执行流程
+## 执行流程
 
 ### 第 1 步：读取现有文件
 
@@ -351,11 +370,11 @@ await checkTypeScriptErrors(targetPath);
 // 修改 2：添加导出按钮导入
 replace_string_in_file({
   oldString: `
-import { Button } from 'Ant-design';
+import { Button } from '{{DESIGN_PACKAGE}}';
 import UserTable from '@/components/UserTable';
   `,
   newString: `
-import { Button } from 'Ant-design';
+import { Button } from '{{DESIGN_PACKAGE}}';
 import UserTable from '@/components/UserTable';
 import ExportButton from '@/components/ExportButton';
   `,
@@ -573,7 +592,7 @@ const toggleSidebar = () => setSidebarOpen(!sidebarOpen);  // 无用代码
 
 - [意图识别](./intent-detection.md) - 如何路由到此工作流
 - [重构文件工作流](./refactor-file.md) - 大范围修改使用重构模式
-- [Figma MCP 集成规范](../reference/figma-mcp-integration.md) - API 调用细节
-- [样式映射策略](../reference/style-mapping-strategy.md) - Token 匹配算法
-- [错误处理策略](../reference/error-handling.md) - 异常情况处理
-- [成功验收标准](../reference/success-criteria.md) - 质量评估标准
+- [Figma MCP 集成规范](../references/figma-mcp-integration.md) - API 调用细节
+- [样式映射策略](../references/style-mapping-strategy.md) - Token 匹配算法
+- [错误处理策略](../references/error-handling.md) - 异常情况处理
+- [成功验收标准](../references/success-criteria.md) - 质量评估标准
