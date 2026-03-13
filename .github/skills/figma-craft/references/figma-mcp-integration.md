@@ -136,7 +136,7 @@ const screenshot = await mcp_figma_get_screenshot({
 
 ---
 
-## 📐 样式值提取
+## 样式值提取
 
 ### CSS 变量格式解析
 
@@ -158,7 +158,7 @@ var(--name, VALUE) → VALUE
 
 ---
 
-## 🔄 转换规则
+## 转换规则
 
 ### 从 Figma 输出到项目代码
 
@@ -166,13 +166,13 @@ var(--name, VALUE) → VALUE
 
 - Tailwind 类 → 项目 Design Token
 - 内联样式 → useCreateStyles hook
-- 任意组件名 → Neat Design / TopUp 组件
+- 任意组件名 → {{DESIGN_SYSTEM}} / {{PROJECT_COMPONENT_PREFIX}} 组件
 
 **2. 重用项目组件**
 优先顺序：
 
-1. TopUp 包装组件（如 TopUpTableV2）
-2. Neat Design 组件（如 Table, Button）
+1. {{PROJECT_COMPONENT_PREFIX}} 包装组件（如 {{PROJECT_COMPONENT_PREFIX}}Table）
+2. {{DESIGN_SYSTEM}} 组件（如 Table, Button）
 3. 自定义组件（如必须）
 
 **3. 遵循项目样式系统**
@@ -195,7 +195,7 @@ fontSize: token['font-size-body-medium']
 
 ---
 
-## ⚠️ 常见错误
+## 常见错误
 
 ### 1. 跳过 get_design_context 直接用 get_metadata
 
@@ -219,7 +219,7 @@ fontSize: token['font-size-body-medium']
 
 ---
 
-## ✅ 最佳实践
+## 最佳实践
 
 1. **始终检查响应完整性**
 2. **提取 fallback 值而非 CSS 变量名**
