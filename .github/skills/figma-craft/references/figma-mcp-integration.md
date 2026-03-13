@@ -230,7 +230,7 @@ fontSize: token['font-size-body-medium']
 
 ---
 
-## 🔗 相关文档
+## 相关文档
 
 - [样式映射策略](./style-mapping-strategy.md) - 如何将 Figma 样式映射到项目 Token
 - [错误处理指南](./error-handling.md) - MCP 调用失败时的处理方案
